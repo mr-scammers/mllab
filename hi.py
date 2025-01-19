@@ -1,57 +1,28 @@
-"""import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt 
-import seaborn as sns
-from sklearn.model_selection import train_test_split 
-from sklearn.linear_model import LinearRegression 
-from sklearn.metrics import r2_score
-#Loadingdataset
-house_df=pd.read_csv('housing.csv') 
-print("Housing dataset columns:") 
-print(house_df.columns)
-#FeatureExtraction
-X=house_df[['Avg.Area Income','Avg.Area House Age','Avg.Area Number of Rooms','Avg.Area Number of Bedrooms','Area Population']] 
-y =house_df['Price']
-#SplittingTrainandTestdata
-X_train,X_test,y_train,y_test=train_test_split(X,y,test_size= 0.3)
-#LinearRegresionModelCreation
-reg_model =LinearRegression()
-#Traing the model (fit)
-reg_model.fit(X_train,y_train)
-#ModelPrediction
-y_pred=reg_model.predict(X_test)
-#Accuracyofmodel
-print("R-Sqaurevalue",r2_score(y_test,y_pred))
-#Visualization
-plt.scatter(y_test,y_pred) 
-plt.show()"""
-
+import pandas as pd 
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt 
-import seaborn as sns
+import seaborn as sns 
+%matplotlib inline
 from sklearn.model_selection import train_test_split 
-from sklearn.linear_model import LinearRegression 
-from sklearn.metrics import r2_score
-#Loadingdataset
-house_df=pd.read_csv('housing.csv') 
-print("Housing dataset columns:") 
-print(house_df.columns)
-#FeatureExtraction
-X=house_df[['Avg. Area Income','Avg. Area House Age','Avg. Area Number of Rooms',
-            'Avg. Area Number of Bedrooms','Area Population']] 
-
-y =house_df['Price']
-#SplittingTrainandTestdata
-X_train,X_test,y_train,y_test=train_test_split(X,y,test_size= 0.3)
-#LinearRegresionModelCreation
-reg_model =LinearRegression()
-#Traing the model (fit)
-reg_model.fit(X_train,y_train) 
-#ModelPrediction
-y_pred=reg_model.predict(X_test)
-#Accuracyofmodel
-print("R-Sqaurevalue",r2_score(y_test,y_pred))
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
+from IPython.display import Image
+from six import StringIO
+from sklearn.tree import export_graphviz 
+import pydot
+df=pd.read_csv('kyphosis.csv')
+X=df.drop('Kyphosis',axis=1) 
+y =df['Kyphosis']
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.20) 
+dtree =DecisionTreeClassifier()
+dtree.fit(X_train,y_train)
+predictions=dtree.predict(X_test)
+print("AccuracyScore",accuracy_score(y_test,predictions)) 
+print("Confusion Matrix")
+print(confusion_matrix(y_test,predictions))
 #Visualization
-plt.scatter(y_test,y_pred) 
-plt.show()
+features=list(df.columns[1:]) 
+dot_data =StringIO()
+export_graphviz(dtree,out_file=dot_data,feature_names=features,filled=True,rounded=True)
+graph =pydot.graph_from_dot_data(dot_data.getvalue()) 
+Image(graph[0].create_png())
