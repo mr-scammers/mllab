@@ -1,28 +1,25 @@
-import pandas as pd 
-import numpy as np
-import matplotlib.pyplot as plt 
-import seaborn as sns 
-%matplotlib inline
-from sklearn.model_selection import train_test_split 
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
-from IPython.display import Image
-from six import StringIO
-from sklearn.tree import export_graphviz 
-import pydot
-df=pd.read_csv('kyphosis.csv')
-X=df.drop('Kyphosis',axis=1) 
-y =df['Kyphosis']
-X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.20) 
-dtree =DecisionTreeClassifier()
-dtree.fit(X_train,y_train)
-predictions=dtree.predict(X_test)
-print("AccuracyScore",accuracy_score(y_test,predictions)) 
-print("Confusion Matrix")
-print(confusion_matrix(y_test,predictions))
-#Visualization
-features=list(df.columns[1:]) 
-dot_data =StringIO()
-export_graphviz(dtree,out_file=dot_data,feature_names=features,filled=True,rounded=True)
-graph =pydot.graph_from_dot_data(dot_data.getvalue()) 
-Image(graph[0].create_png())
+a=input().split()
+d={"one":1,"two":2,"three":3,"four":4,"five":5,"six":6,"seven":7,"eight":8,"nine":9,"ten":10,
+   "eleven":11,"twelve":12,"thirteen":13,"fourteen":14,"fifteen":15,"sixteen":16,"seventeen":17,"eighteen":18,"nineteen":19,"twenty":20,
+   "thirty":30,"fourty":40,"fifty":50,"sixty":60,"seventy":70,"eighty":80,"ninety":90,
+   }
+m={"hundred":100,
+   "thousand":1000,
+   "million":1000000}
+l=[]
+n=0
+s=0
+while n<len(a):
+    if a[n] in d:
+        l.append(s)
+        s=0
+        s=s+d[a[n]]
+    else:
+        s=s*m[a[n]]
+    n+=1
+
+l.append(s)
+
+
+res=sum(l)
+print(res)
